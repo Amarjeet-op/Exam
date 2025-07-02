@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>EX200 Exam Practice</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+        <style>
+            body {
+                font-family: 'Nunito', sans-serif;
+                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+                margin: 0;
+                padding: 2rem;
+                display: grid;
+                grid-template-columns: repeat(5, minmax(0, 1fr));
+                gap: 1rem;
+                justify-content: center;
+                min-height: 100vh;
+                position: relative;
+            }
+
+            h1 {
+                grid-column: 1 / -1;
+                text-align: center;
+                font-family: 'Dancing Script', cursive;
+                font-size: clamp(2.5rem, 5vw, 3.5rem);
+                font-weight: 700;
+                margin: 0 0 1.5rem;
+                color: #1a1a40;
+                letter-spacing: 1px;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            .card {
+                background: #ffffff;
+                border-radius: 8px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+                padding: 0.8rem 1.2rem;
+                width: fit-content;
+                margin: 0 auto;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                cursor: pointer;
+                border: 2px solid transparent;
+                position: relative;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            }
+
+            .card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(180deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);
+                z-index: 0;
+            }
+
+            .card:hover {
+                transform: translateY(-4px) scale(1.05);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+                border-color: #7c3aed;
+            }
+
+            .card h3 {
+                margin: 0 0 0.6rem;
+                font-size: 0.9rem;
+                color: #2d3748;
+                font-weight: 700;
+                position: relative;
+                z-index: 1;
+                transition: color 0.3s ease;
+            }
+
+            .card a {
+                text-decoration: none;
+                color: #ffffff;
+                background: linear-gradient(90deg, #7c3aed, #db2777);
+                padding: 0.4rem 0.8rem;
+                border-radius: 5px;
+                display: inline-block;
+                font-weight: 600;
+                font-size: 0.75rem;
+                transition: all 0.3s ease;
+                position: relative;
+                z-index: 1;
+            }
+
+            .card a:hover {
+                background: linear-gradient(90deg, #6d28d9, #c026d3);
+                transform: scale(1.05);
+            }
+
+            .card.clicked {
+                background: linear-gradient(145deg, #34d399, #10b981);
+                border-color: #10b981;
+            }
+
+            /* --- MODIFIED: New aesthetic for the review state --- */
+            .card.review {
+                background: linear-gradient(145deg, #fbbf24, #f59e0b); /* Amber/gold gradient */
+                border-color: #f59e0b;
+            }
+            
+            /* New rule for better text contrast on review cards */
+            .card.review h3 {
+                color: #422006; /* Dark brown for high contrast on yellow */
+            }
+
+            /* New rule for the button on review cards */
+            .card.review a {
+                background: rgba(255, 255, 255, 0.7); /* Semi-transparent white button */
+                color: #422006; /* Dark brown text */
+            }
+
+            .card.review a:hover {
+                background: #ffffff; /* Solid white on hover */
+                transform: scale(1.05);
+            }
+            
+            .reset-btn {
+                position: fixed;
+                left: 1rem;
+                bottom: 1rem;
+                padding: 0.6rem 1.2rem;
+                font-size: 0.8rem;
+                font-weight: 600;
+                letter-spacing: 0.5px;
+                background: linear-gradient(90deg, #ef4444, #f97316);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                z-index: 1000;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                transition: all 0.3s ease;
+            }
+
+            .reset-btn:hover {
+                background: linear-gradient(90deg, #dc2626, #ea580c);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+            }
+
+            /* Responsive adjustments */
+            @media (max-width: 1200px) {
+                body {
+                    grid-template-columns: repeat(4, minmax(0, 1fr));
+                }
+            }
+
+            @media (max-width: 992px) {
+                 body {
+                    grid-template-columns: repeat(3, minmax(0, 1fr));
+                    padding: 1.5rem 1rem;
+                }
+            }
+
+            @media (max-width: 768px) {
+                body {
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                    padding: 1rem 0.5rem;
+                }
+            }
+
+            @media (max-width: 576px) {
+                body {
+                    grid-template-columns: minmax(0, 1fr);
+                }
+                h1 {
+                    font-size: clamp(2rem, 8vw, 2.5rem);
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Red Hat Certified System Administrator Exam (EX200)</h1>
+
+        <script>
+            // No changes to JavaScript
+            const links = [
+                'https://www.examtopics.com/discussions/redhat/view/31136-exam-ex200-topic-1-question-1-discussion/',
+'https://www.bing.com/ck/a?!&&p=839271c8961fe8bfc61d389cac05888d35d3b9aa440a683024a4bf65cb003355JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvODYzMjctZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTItZGlzY3Vzc2lvbi8&ntb=1',
+'https://www.bing.com/ck/a?!&&p=70df9b9c5eac78028bb861bf41378688734ee4e37cd8d107625332cb884cdf63JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMzExNDctZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTMtZGlzY3Vzc2lvbi8&ntb=1',
+'https://www.bing.com/ck/a?!&&p=ea2dd3d1f5187752f6d437533e0810356dbea071f3a8257ad906736b95c4ef8aJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMzA5OTQtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTQtZGlzY3Vzc2lvbi8&ntb=1',
+'https://www.bing.com/ck/a?!&&p=e6cdcf07fa52abfccf31cb0cf28c74a202e8251d9cad7bb37d26bb14b3ae48b2JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMzk2OTgtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTUtZGlzY3Vzc2lvbi8&ntb=1',
+'https://www.bing.com/ck/a?!&&p=068d5395d6d2a9c6c8d1bf9d27db37b283113c73c9475fb1332885ad5608cbefJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNDA3NzktZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTYtZGlzY3Vzc2lvbi8&ntb=1',
+'https://www.bing.com/ck/a?!&&p=fd25096eb2082cc575a95e1d9736ee849d0ac927b39b085be2cd352f5c8e93b1JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNjk1MDItZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTctZGlzY3Vzc2lvbi8&ntb=1',
+'https://www.bing.com/ck/a?!&&p=f955b1491e73f23eab57d63a0d70bebd6bb0afebeab7e3f57f6c374630b41862JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvODIyMjEtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTgtZGlzY3Vzc2lvbi8&ntb=1',
+'https://www.bing.com/ck/a?!&&p=71bd6879b2de2af80c929de049f75956fe0d28b50df045122ac67fdd30b61c80JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMzY1MjktZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTktZGlzY3Vzc2lvbi8&ntb=1',
+'https://www.bing.com/ck/a?!&&p=23e4ab196ef604e92d44a7994f87730ff924368f8776deb54219b5f3efa68e6cJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMzI5MjktZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTEwLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=ddeecdc1e1b0cdd9729202d867afb70ed400e12f2aef1868fb2151abc8056140JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMzA3MTktZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTExLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=d902c85eeff76858fe2345f355d89b9e745e81308971308b9e904aa6680ab80eJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNjM3MTUtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTEyLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=8fce3fed6260dee64b7e0e3f4df757ddacbc1534ab4ce6401efa9e4144bd16c6JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMzUzMjItZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTEzLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=fd8333af8c8a612b10277b66c83a6eda414ea66e95c908ef9c34263c47541622JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvODgyODUtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTE0LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=f4be21a2fda2fd31ef04dcd6e0d4de03565ae368ff20bfa6c0d327316fa57c89JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMzQ4NDYtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTE1LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=d713d500a61d2474ce7ac93d4239524ae1016ef86ad56f5299a385dc3234b4d7JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNDE2NDAtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTE2LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=9fad1639f4cec400d32ac5163cfa319bb6fdaa823a1ecac73e47c3796d02fc69JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMzk3MDEtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTE3LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=dd4aea77c8bc911c4046ad66350a01add82703793e9d3ba89b3251217bb9e493JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMzk3MDMtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTE4LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=f443b04d6e36749786416f59ff9c59299f6d073d484da487956098b8783fbbadJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTEwMjQzLWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi0xOS1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=db843462ab7a4c752fd8be90c76fdd02389f58e8f2e89f5d093ebb35042780b8JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMzk3MDQtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTIwLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=d5ebfefb109a253e26ad93a1e60f103a4b39b3b9e795bc7f07f331976cd3247dJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNjM3NjAtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTIxLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=05d89169a8831b1e871a1477c9f4b2c026dcff3a8514b6a947db53108fc059ccJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMzMwOTEtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTIyLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=019874d009a905d7912744e7426c89ec372edae4ba5e51e09cdc803921d0e94cJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNDI1ODAtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTIzLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=f0cee23bc57b0021a020cd398f3fa25fa1b00bda6b1baacf309a88c392f80876JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNTcxNjctZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTI0LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=539c7cc86f4705a9865531f853d3ed3bc151dd0cf13a4d2e433ec43898cab5edJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNDI1ODEtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTI1LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=85eee3df5f177e4082b090523356f71797d76f217e863ef9a2a981567b84c9eeJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNDMxMjEtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTI2LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=3c5d79363f8c23ab5e4edd5473085901f4034b0f63d4e98922e12ef03bdcf1c6JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTEwMTE0LWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi0yNy1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=4667468aca29d3bba10dc5a4c2ff9424afd07209ed63ec2a67ea711c913e20aaJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNjIwNjYtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTI4LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=a55c3c86ab66500104aca005c62b6ca410a29385680fcfc4eef1bf878e0514b8JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTI1MjMzLWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi0yOS1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=032b401d577b162c93aefdc3840eff82d8646df5a745528407df408cde5622d6JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNDAyODgtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTMwLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=20c561066350164d81168028ba869cb92a238cdad69decfd045f43868e83062fJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTMwNTk3LWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi0zMS1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=490b926a3b68cbcb025b742dfd75a87eebd673f98edbded7fd8da1d3f0875be6JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTcxNDY0LWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi0zMi1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=4f9275570a5a8347463fd81a7a0744ed321db19df0e11a4aa76452c7734d069bJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMzk3MDYtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTMzLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=f78569d18668e3c2131e2f15ab241f275e9aee78f09596712f0590df6acd9f9eJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNTc3NTktZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTM0LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=dcd6fae34e862822751291cc20370bc0ce8cbaef360e8b382b3c07bc0b25350bJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTI1MzM0LWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi0zNS1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=39d7f1395489db5bdf6a4a0e9993acc78045a966219f14b37e9bfcf4f01a7c93JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMzA3MjQtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTM2LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=fcbae217a18bc6e3b31bc95ac7cf6df0ed897bee29460e4f9accd82a2c86e84eJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMzEwMTktZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTM3LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=35191c9a6bbb2e86cc0a3e506e054b25bedf7a5b2cc6cd1341940fd55c2e8bc5JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNjIzNDEtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTM4LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=eb7f57c971bc9ee6b777b205a55a234398f09436dac89095e9abfdf3b625242dJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMzc2NzYtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTM5LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=b75d5e6f570b6e4db95c140deb11d460689c147a8e07c0e616237efad13b12b8JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNDg3MzQtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTQwLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=5eacddccc71cd2f15ca3ca244d2abfc1f3ea6966679eeab68abdf8a6d74ba090JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTI3MDIwLWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi00MS1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=bd412214c5d690a5292128c9669683bc52ee5358067990d41bff4d0f0a838a35JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNjM3NDktZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTQyLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=0ec24a57f05a68af9898b322e63cbbe6c5c8b5ffbbf0d9c6c36b2a9594471884JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMzY3NDEtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTQzLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=f5f3ae32c511917c3a433aaf3cc7fe4ef93db4c8dd67107579d83e97df502600JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNDI1ODktZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTQ0LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=8cea63b2510068073b007cbc8558ca03f974700c358127acfc1c2054a5244fc4JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNjk1MDMtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTQ1LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=21494551aed1f606b73e58727c750892d1ad6fb17220ed1ccfb94d95df867bdfJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMzY3NDctZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTQ2LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=3a374efb45b1a221995c1612e16444ce87cbb948ec16864258486b09ffde9b83JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNTM1ODMtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTQ3LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=d54a726ddd919533162ef9747e0d598dfbfef94313b6ed714cf322c1565d6f09JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNjI1NDMtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTQ4LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=3ee3e1b1ebdc74b0bccb437333594927123e8d2d87083eb45e4a76ca6db869bcJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMzY3NDktZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTQ5LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=78459e2a7e6c10de1140ff25015347697a0db707c92f247a85ddd5d2d49003e2JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTMwNzIxLWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi01MC1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=8f69dd3c8a03d63188249ac548cddbb4f233f50f412be47b5b093b9b9426e825JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMzU0MjUtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTUxLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=e354504299a80982fef2c6b0e7573227f6d7ff763840693e6b910267e47b53f2JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNzU2OTgtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTUyLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=a557c67cab3f83eb2f5e7c29fcc55e9872da166fffc74c018f841bc2fc400424JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNTMzNjMtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTUzLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=1896c648b6308b1826fa9e15fa5427526e8c5e4398452206c7e33f50d1cb5a00JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMzY4NzktZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTU0LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=86ecbbd1b838f763213ec72aa72788ec5d1b2143dff8c48d644f4a3a894f1280JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNjc3ODYtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTU1LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=57b399df0364d758e24ba0076b8f8037bed47dd6807cf62155b3aba040641c4bJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNjkzMzUtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTU2LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=5ff21a8e3274d7992c14deb43c2753349e41ce9d1208e587d2b5c2f0b6fdafdbJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNTUwNzktZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTU3LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=daed89ec304cabf3a9075c2b36ff9cfd19d82aa177333b935ab7ae26d8e27a2fJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNjk1MDUtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTU4LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=b78f96c101d670716b9a39d8ce3bbef91d9f19d9c2d750e6056b028be2528695JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNDI1OTAtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTU5LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=1508e16563fcb8271a9639234713feb30a5530aa2f788e84fb9edc0df47f4377JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNzU3MDAtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTYwLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=fd4aa359c3d7358e9d649ff7183375782c188dafeda8977caa78d12661c0d6deJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTMwNzQxLWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi02MS1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=b247b9c06bfc0a4024cce1663f79b7443414bab38c13b7b42de8e4edd1da5bd8JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNDI1OTEtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTYyLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=9a4261068efc0c10e6299e7e7ebf6713b9c77932a0ea5a30898a9b5a0499c5a1JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMzEzNjQtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTYzLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=b11d68d701853924246af40a89a2b0a86c62899b485eb12d6bf9417a1f7a5239JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNTM2NTItZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTY0LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=b44f0e6324ffa6ccb8587f8e09cfce4eac0044e250cbe309c16222c54a34332cJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTMwODA4LWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi02NS1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=c9466ee68853e1d440618a716ff7ce6858a9c781bdc07929bdcb3fab0615cf2cJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNTMzNjUtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTY2LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=07ceb96949c071474eee5cfef4053ae1329c7e48ca27f6e2762a937447e451d9JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNzc2OTMtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTY3LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=5900f5259d8f247ee9255b46a6dc4c7322b24d9fd4a48864e6714deade9cc3b2JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNjI2MDgtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTY4LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=fac04f1254103da4cc3eda4a6660b8c1b9263056f0cec2164e8002b0d82cbb67JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTMwODEzLWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi02OS1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=5986767b13d82c5f872aa9ca53b0de45343fb959f46bea62b7625b6aaa0ac609JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNTgwMzctZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTcwLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=39b7995712233e40bef9143560dcdb9dd2640d3ce900d897998841c2b8857da4JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNzY3NDktZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTcxLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=f49e715e617ba67aeb95a388553a3036165448706f633113b67dea59449175dfJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNjI2MTAtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTcyLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=10b8c8f0b6448896e809546d31fb60bdb8c5ea82ee40bdd4e3b1ff4959b1fe19JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNjI2MTEtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTczLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=5e964029f33d79e57f491252977266d3bc8e794bea3f64492fac07f2b5b25555JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTEzNDI1LWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi03NC1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=1bf67d2c7138a3ffa68ad308e823ac3d794fa8d16aae4f6b26b5be5fa4dba8acJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMzM4MDYtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTc1LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=cdd43adbe8e9b1a3218b27dbd9e34c937924aaf476b8737f77744cab4edb51a5JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNTM1ODQtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTc2LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=b0ba606b5e8ada5bc2f94930ebe4cb793190ca9e72784d6721605ca446ac7dc5JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNDI2MzQtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTc3LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=f5a45cc1f6d3640e71669c19ca284b6ba77a9311bba5901dcd3c47eec81099e6JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTMwODY1LWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi03OC1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=a662fda1b9344a9b9bc8ba158381541d8701f0c847f1ebd5d852f65c437bb43eJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNjI2MjMtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTc5LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=7cfdab67c86e4e3021c8d56eed8a10954962cbc32eeec871f4f34dae86733738JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNDI2MzUtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTgwLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=a1fabc6ec9097dcc4e0678259ca903e40b7965cc90140fa7cdadd6eb30aa3e8eJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvODI2OTAtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTgxLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=bce0eadfb85445eb44a08f6c97d11173773fe8f4128ef4c53950e1519fda3dc1JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNDI2NDAtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTgyLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=7917d2533ddd5aa2b4a914a0be3e7a613284af2fe2806f455a8b8b52f24e7a30JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTQzMzEzLWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi04My1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=144ec4f4fcd289e6588cbcaaee5628b080a9b33987ccf021f9c4626c2942ea8fJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNjI2NTAtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTg0LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=e1ccbad5394e4cde031783fdd1b4f6d35164b428ff481559c809b820d3257e1bJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTMwOTYzLWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi04NS1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=abd2b370aa9c223102e08fecef0bbfa39d16f29960821b2e538610e55c054891JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNjI2NTEtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTg2LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=2588458c8b73b14446d1c8ae37602ffdbc8fb19226042589a7c95012b85b44e3JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTMwOTcwLWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi04Ny1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=6fbf477d7ab7c459326e398da8ead9e121f5d437fb21060e50415f2be89d82caJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTMwOTcxLWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi04OC1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=782985d81672c1ca9a58557262cc4a0401e2fe748f1517b087bc169fb57b4199JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNDI2NDEtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTg5LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=42878a9a7f95f40894e3de3c40abf394808e33069b58b21e1970b847b35bb18aJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTEyMzY3LWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi05MC1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=d8cd5744a9f4d2bfb9b35fd4493b50b9db8b4d9cf1241e0b40551bd1eff62babJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNzgyMjAtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTkxLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=06a6b02d6116ad7d5a4ce24dfcaf59b7886d3cc4705430f592bc942578777b98JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNDI2NDItZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTkyLWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=9ce26e84c798b72e79342d1c4c77d4d1ce89bb051caf43ab8cee4a3b16a97f0fJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTMwOTkwLWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi05My1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=b58cb4ae2aa3d0c56abc01e7eb1baf458eb5502d8f811e2fae2582fd4a29d0fbJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNTA3MzItZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTk0LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=442b5fe41b7918e6fcaace864963dc553048522c7a2943ab13d4b8515aa623d0JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNjI3MTItZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTk1LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=4ed1dcb373a5953b6274dd6fd219a0a0e6b7d5bba9e8b0d996f835c1adc352f2JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTMwOTkxLWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi05Ni1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=3c5d10143634c8d052554b5753cf0a11ae67237b103202e92863232d00a9743eJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTMxMDg1LWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi05Ny1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=88698525a98acb89b2349d46813b89ab29fd8bbb9b6cfb8f58fb126c5b841886JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNjI3MTMtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTk4LWRpc2N1c3Npb24v&ntb=1',
+'https://www.bing.com/ck/a?!&&p=4d9ffd91ab0c0422f115dc5672876d244350bea3f0da3c5a62553fca79bf4bafJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTMxMDg5LWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi05OS1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=dd826fe9abb3d87a7c828e77e1746f2722e82b496e12f4515343be8ee7431b93JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNjI3MTQtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTEwMC1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=5944e616062bd9be4cd4382771588102c68712f286610afd5cbcd4c56fc75fe5JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTMxMDk1LWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi0xMDEtZGlzY3Vzc2lvbi8&ntb=1',
+'https://www.bing.com/ck/a?!&&p=ec33ba17eee25eb96fc6fcf1c73ea5c90284635c0795be0a2795a983ffb4d1e0JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNTI5NDktZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTEwMi1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=709ffb42535b28322dfb23a53ce414263d1265ab012f38a65391b877e60485ecJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNTg4NzMtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTEwMy1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=4d15c17b727f516df4c8bb02c25532e715a97e3e873227ff0532d11c11db0539JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNTM1ODUtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTEwNC1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=ed17e930c57255708454cfa9305970dc3273316b9e306365d87aaf3d0cfa7f0dJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMzA3MTYtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTEwNS1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=e0c557fb5d5c1d20f294886da9c0d0d612b9229936cd3d19a535a3074a3e87bcJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTQzODg3LWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi0xMDYtZGlzY3Vzc2lvbi8&ntb=1',
+'https://www.bing.com/ck/a?!&&p=9b3cb83a0dc65f814dd5df64552a74f0ac8a206c56467284efd3da84a4845172JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTQzODg5LWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi0xMDctZGlzY3Vzc2lvbi8&ntb=1',
+'https://www.bing.com/ck/a?!&&p=a2b288e5b1b0efc04badd69b179073d6f93dd7f4144a7164d4d8cd546010e28eJmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNTc1MTYtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTEwOC1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=1d48657267e275ab9e913fc42ceabbef219a7366f8a9d8b07c63780845c570a5JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNjMxMzYtZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTEwOS1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=c8ab44c7cd6be87a7c494baa448125441f88cad138837dd0d8051ae1b67deba7JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvNTExNDctZXhhbS1leDIwMC10b3BpYy0xLXF1ZXN0aW9uLTExMC1kaXNjdXNzaW9uLw&ntb=1',
+'https://www.bing.com/ck/a?!&&p=ac39ccb17320c38cb282011aa6f3ec7db6b9f065271fd2ff4f7a2dbbd3a37d53JmltdHM9MTc1MTQxNDQwMA&ptn=3&ver=2&hsh=4&fclid=0a3025d5-f7d5-6708-085b-33c8f6bf6673&u=a1aHR0cHM6Ly93d3cuZXhhbXRvcGljcy5jb20vZGlzY3Vzc2lvbnMvcmVkaGF0L3ZpZXcvMTM0ODk2LWV4YW0tZXgyMDAtdG9waWMtMS1xdWVzdGlvbi0xMTEtZGlzY3Vzc2lvbi8&ntb=1',
+
+            ];
+
+            const completed = new Set(
+                JSON.parse(localStorage.getItem('completed') || '[]')
+            );
+            const review = new Set(
+                JSON.parse(localStorage.getItem('review') || '[]')
+            );
+
+            links.forEach((link, i) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.ondblclick = () => handleDoubleClick(i);
+                card.innerHTML = `<h3>Question ${i + 1}</h3><a href="${link}" onclick="markCompleted(${i}, event)">View Discussion</a>`;
+                document.body.appendChild(card);
+            });
+
+            window.onload = () => {
+                applyClasses();
+            };
+
+            function markCompleted(index, event) {
+                event.preventDefault();
+                if (!review.has(index)) {
+                    completed.add(index);
+                    review.delete(index);
+                    saveStates();
+                    applyClasses();
+                }
+                window.open(event.target.href, '_blank');
+            }
+
+            function handleDoubleClick(index) {
+                if (review.has(index)) {
+                    review.delete(index);
+                } else {
+                    review.add(index);
+                    completed.delete(index);
+                }
+                saveStates();
+                applyClasses();
+            }
+
+            function resetHighlights() {
+                localStorage.removeItem('completed');
+                localStorage.removeItem('review');
+                completed.clear();
+                review.clear();
+                applyClasses();
+            }
+
+            function saveStates() {
+                localStorage.setItem(
+                    'completed',
+                    JSON.stringify([...completed])
+                );
+                localStorage.setItem('review', JSON.stringify([...review]));
+            }
+
+
+
+            function applyClasses() {
+                document.querySelectorAll('.card').forEach((card, i) => {
+                    card.classList.remove('clicked', 'review');
+                    if (completed.has(i)) {
+                        card.classList.add('clicked');
+                    }
+                    if (review.has(i)) {
+                        card.classList.add('review');
+                    }
+                });
+            }
+        </script>
+
+        <button onclick="resetHighlights()" class="reset-btn">
+            Reset
+        </button>
+    </body>
+</html>
